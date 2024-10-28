@@ -8,8 +8,7 @@ InputParameters
 multigrainmergeApp::validParams()
 {
   InputParameters params = MooseApp::validParams();
-  params.set<bool>("use_legacy_material_output") = false;
-  params.set<bool>("use_legacy_initial_residual_evaluation_behavior") = false;
+
   return params;
 }
 
@@ -21,13 +20,17 @@ multigrainmergeApp::multigrainmergeApp(InputParameters parameters) : MooseApp(pa
 multigrainmergeApp::~multigrainmergeApp() {}
 
 void
-multigrainmergeApp::registerAll(Factory & f, ActionFactory & af, Syntax & s)
+multigrainmergeApp::registerAll(Factory & f, ActionFactory & af, Syntax & syntax)
 {
-  ModulesApp::registerAllObjects<multigrainmergeApp>(f, af, s);
+  ModulesApp::registerAll(f, af, syntax);
   Registry::registerObjectsTo(f, {"multigrainmergeApp"});
   Registry::registerActionsTo(af, {"multigrainmergeApp"});
 
   /* register custom execute flags, action syntax, etc. here */
+  
+registerSyntax("LoopACGrGrPolyAction", "Kernels/LoopACGrGrPoly");
+registerSyntax("PolycrystalColoringIC", "ICs/lycrystalColoringIC");
+
 }
 
 void
